@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新加坡工程咨询 · 你问我答</title>
+  <meta name="description" content="新加坡建筑工程咨询常见问题解答：M&E、ACMV、消防、水务、政府审批等。">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #0f766e;
+      --accent-light: #14b8a6;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --tag-bg: #f0fdfa;
+      --tag-border: #99f6e4;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    
+    /* Header */
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 40px 24px; text-align: center; }
+    header h1 { font-size: 2rem; color: var(--accent); margin-bottom: 8px; }
+    header p { color: var(--muted); font-size: 1rem; }
+    
+    /* Nav tabs */
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 800px; margin: 24px auto; padding: 0 24px; }
+    .tab { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); cursor: pointer; font-size: 0.9rem; color: var(--muted); transition: all 0.2s; }
+    .tab:hover, .tab.active { border-color: var(--accent); color: var(--accent); background: var(--tag-bg); }
+    
+    /* Search */
+    .search-wrap { max-width: 600px; margin: 20px auto; padding: 0 24px; }
+    .search { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; transition: border 0.2s; }
+    .search:focus { border-color: var(--accent); }
+    
+    /* FAQ list */
+    .faq-list { max-width: 800px; margin: 30px auto; padding: 0 24px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: border 0.2s; }
+    .faq-item:hover { border-color: var(--accent-light); }
+    .faq-q { padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+    .faq-q::after { content: '+'; font-size: 1.2rem; color: var(--accent); transition: transform 0.2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { padding: 0 20px 16px; color: var(--muted); font-size: 0.95rem; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border: 1px solid var(--tag-border); border-radius: 4px; background: var(--tag-bg); color: var(--accent); margin-right: 8px; }
+    
+    /* Footer */
+    footer { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 40px; }
+    
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .tabs { gap: 6px; }
+      .tab { padding: 6px 12px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏗️ 新加坡工程咨询 · 你问我答</h1>
+    <p>建筑机电 · 暖通空调 · 消防保护 · 水务系统 · 政府审批</p>
+  </header>
+
+  <div class="search-wrap">
+    <input class="search" type="text" placeholder="搜索问题关键词..." id="searchBox" oninput="filterFAQ()">
+  </div>
+
+  <div class="tabs" id="tabs">
+    <span class="tab active" onclick="filterCat('all')">全部</span>
+    <span class="tab" onclick="filterCat('acmv')">ACMV 暖通</span>
+    <span class="tab" onclick="filterCat('fire')">消防</span>
+    <span class="tab" onclick="filterCat('water')">水务</span>
+    <span class="tab" onclick="filterCat('authority')">政府审批</span>
+    <span class="tab" onclick="filterCat('contract')">合同/VO</span>
+    <span class="tab" onclick="filterCat('general')">综合</span>
+  </div>
+
+  <div class="faq-list" id="faqList"></div>
+
+  <footer>
+    <p>本站内容仅供参考，不构成专业建议。具体事项请咨询持牌专业工程师 (PE)。</p>
+    <p style="margin-top:8px;">Powered by GitHub Pages · 2026</p>
+  </footer>
+
+<script>
+const faqs = [
+  // ACMV
+  { cat: "acmv", q: "什么是 ACMV？在新加坡工程中起什么作用？", a: "ACMV 全称 Air-Conditioning and Mechanical Ventilation，即空调与机械通风系统。在新加坡，几乎所有商业和住宅建筑都需要 ACMV 系统，因为热带气候下空调是刚需。ACMV 设计需符合 SS 553（空调与机械通风系统实践守则）以及 BCA 的 Green Mark 要求。" },
+  { cat: "acmv", q: "ACMV 系统设计需要考虑哪些关键参数？", a: "主要参数包括：(1) 冷负荷计算 — 需考虑围护结构、人员、照明、设备产热；(2) 新风量 — 依据 SS 553 和 ASHRAE 62.1 标准；(3) 风管/水管压降 — 影响风机和泵的选型；(4) 噪音控制 — 特别是住宅和医院项目；(5) 能效比 — BCA Green Mark 对 COP/EER 有最低要求。" },
+  { cat: "acmv", q: "冷负荷计算有哪些常见方法？", a: "常用方法包括：(1) 稳态传热法 — 简单项目快速估算；(2) 逐时动态模拟 — 使用 eQUEST、EnergyPlus、IES-VE 等软件进行全年 8760 小时模拟；(3) CLTD/SCL/CLF 方法 — ASHRAE 手册推荐的简化动态方法。新加坡项目通常需要动态模拟以满足 Green Mark 要求。" },
+  { cat: "acmv", q: "什么是 Fume Hood 排风系统？设计要点是什么？", a: "Fume Hood（通风柜）是实验室用于排除有害气体的局部排风设备。设计要点：(1) 面风速通常 0.5 m/s；(2) 补风系统需匹配排风量，维持实验室微负压；(3) 排风管道需耐腐蚀材质；(4) 高空排放需满足 NEA 要求；(5) 需配合紧急冲洗系统和气体侦测。" },
+  { cat: "acmv", q: "VRF 和 Chiller+AHU 系统怎么选？", a: "取决于项目规模和需求：<br><strong>VRF（变冷媒流量）：</strong>适合中小型项目（<5,000 RT），安装灵活，部分负荷效率高，但冷媒管长受限。<br><strong>Chiller+AHU：</strong>适合大型项目（商场、医院），集中管理，便于维护，初投资较高但长周期运行成本可控制。新加坡大型项目多用 Chiller 系统。" },
+  
+  // Fire Protection
+  { cat: "fire", q: "新加坡消防系统设计依据哪些法规？", a: "主要法规：(1) Fire Safety Act（消防安全法令）；(2) Fire Code（消防规范）— 由 SCDF 发布；(3) SS 575（自动喷淋系统标准）；(4) SS 552（消防泵系统标准）。所有设计需通过 SCDF 审批，竣工后需获得 Temporary Fire Safety Certificate (TFSC)。" },
+  { cat: "fire", q: "什么类型的建筑需要自动喷淋系统？", a: "根据 Fire Code：(1) 建筑高度 >24m 的所有建筑；(2) 总建筑面积 >5,000 m² 的非住宅建筑；(3) 地下室 >200 m²；(4) 住宅：单层面积 >400 m² 或总层数 ≥4 层的非 landed 住宅。具体要求需查阅 SCDF Fire Code 最新版本。" },
+  { cat: "fire", q: "喷淋系统设计中，危险等级如何分类？", a: "依据 SS 575 和 Fire Code，危险等级分为：(1) Light Hazard（轻危险级）— 办公室、住宅；(2) Ordinary Hazard Group 1-2（普通危险级）— 商店、停车场；(3) Ordinary Hazard Group 3-4 — 工厂、仓库；(4) Extra Hazard（严重危险级）— 易燃液体储存、喷涂车间。不同等级影响喷头间距、设计密度和水力计算。" },
+  { cat: "fire", q: "SCDF 提交消防设计需要准备什么文件？", a: "主要文件：(1) Qualified Person (QP) 签署的消防图纸；(2) 喷淋/消防泵系统水力计算书；(3) 设备选型及 datasheet；(4) 防火分区图；(5) 疏散路线图；(6) Fire Safety Certificate 申请表格。通过 CORENET 系统在线提交。" },
+  { cat: "fire", q: "Fire Command Centre 有什么要求？", a: "Fire Command Centre（消防指挥中心）需满足：(1) 位于首层靠近主要出入口；(2) 面积不小于消防规范要求；(3) 配备消防面板、通讯系统、CRT 显示屏；(4) 需有独立空调和应急照明；(5) 墙体耐火等级 ≥1 小时；(6) 入口需从室外直接可达。" },
+  
+  // Water
+  { cat: "water", q: "新加坡的供水系统由谁管理？设计依据什么标准？", a: "供水系统由 PUB（Public Utilities Board，公用事业局）管理。设计需遵循：(1) PUB Water Supply Standard；(2) CP 48（新加坡给排水实践守则）；(3) BCA 的相关要求。所有接驳 PUB 主管的设计需通过 PUB 审批。" },
+  { cat: "water", q: "建筑给水系统压力如何确定？", a: "关键考虑：(1) PUB 接驳点水压一般为 2-4 bar；(2) 高层建筑需分区供水 — 通常每区不超过 6-8 层；(3) 屋顶水箱+重力供水是最常见方案；(4) 增压泵用于水压不足区域；(5) 恒压泵系统在酒店/医院项目中常用。需注意最小服务压力 1 bar（最不利点）。" },
+  { cat: "water", q: "雨水排放系统设计依据什么？", a: "主要依据 PUB Code of Practice on Surface Water Drainage。设计要点：(1) 重现期（ARI）— 一般排水 10 年，关键区域 50 年；(2) 集水面积和径流系数；(3) Manning 公式计算排水沟/管尺寸；(4) 防洪措施 — 地下室需设集水坑和泵；(5) ABC（Active, Beautiful, Clean）waters 设计理念鼓励生态排水。" },
+  { cat: "water", q: "卫生排水系统中，通气管的作用是什么？", a: "通气管（vent pipe）的作用：(1) 平衡管内气压，防止水封被虹吸破坏；(2) 帮助排水通畅；(3) 排出管道内臭气至室外高空。新加坡 CP 48 要求：每层至少一根通气立管；水平排水管超过一定长度需额外通气；环形通气管用于长距离横向排水。通气管直径不小于对应排水管直径。" },
+  { cat: "water", q: "NEWater 和海水淡化对建筑给水有什么影响？", a: "NEWater（新生水）和海水淡化是新加坡四大国家水喉之二。对建筑给水的影响：(1) PUB 供水品质统一，建筑内无需特别处理；(2) 工业项目可申请 NEWater 直供（需单独申请）；(3) 冷却塔补水鼓励使用 NEWater 以节约饮用水；(4) 建筑需预留 PUB 水表和检查井位置。" },
+  
+  // Authority
+  { cat: "authority", q: "新加坡建筑工程涉及哪些主要政府机构？", a: "主要机构：(1) <strong>BCA</strong>（建设局）— 建筑审批、结构安全、Green Mark；(2) <strong>SCDF</strong>（民防部队）— 消防安全审批；(3) <strong>PUB</strong>（公用事业局）— 供水排水接驳；(4) <strong>LTA</strong>（陆路交通局）— 道路/交通相关；(5) <strong>NEA</strong>（环境局）— 排放、噪音；(6) <strong>JTC</strong>（裕廊集团）— 工业园区项目；(7) <strong>URA</strong>（市区重建局）— 规划审批。" },
+  { cat: "authority", q: "CORENET 是什么？怎么用？", a: "CORENET（Construction and Real Estate NETwork）是新加坡建筑行业的电子提交平台。用途：(1) 向 BCA 提交建筑计划审批；(2) 向 SCDF 提交消防设计审批；(3) 向各机构提交合规文件。需通过 Qualified Person (QP) 账户登录，支持在线审查和批复追踪。" },
+  { cat: "authority", q: "什么是 Qualified Person (QP)？", a: "QP 是新加坡法律规定的合格专业人士，需持 Professional Engineer (PE) 或 Registered Architect (RA) 执照。职责：(1) 对设计负责并签署提交文件；(2) 确保设计符合法规；(3) 竣工后出具合规证明。非 QP 人员可以准备文件，但最终需 QP 审核签署。" },
+  { cat: "authority", q: "BCA Green Mark 对机电系统有什么要求？", a: "Green Mark 对 M&E 的主要要求：(1) 空调系统能效 — COP/EER 最低值；(2) 照明功率密度（LPD）限制；(3) 新风量控制和热回收；(4) 能耗监测和分项计量；(5) 可再生能源鼓励项；(6) 冷媒 GWP 限制。不同 Green Mark 等级（Certified/Gold/Platinum/Zero Energy）要求逐级提升。" },
+  { cat: "authority", q: "临时占用许可证 (TOP) 和 CSC 是什么？", a: "<strong>TOP (Temporary Occupation Permit)：</strong>建筑竣工后由 BCA 发放，允许临时使用。需通过最终检查，确认结构和基本安全达标。<br><strong>CSC (Certificate of Statutory Completion)：</strong>最终合规证书，所有法定要求（消防、M&E、结构等）均满足后由 BCA 发放。获得 CSC 前可先申请 TOP 使用。" },
+  
+  // Contract / VO
+  { cat: "contract", q: "什么是 VO（Variation Order）？什么情况下需要？", a: "VO（变更指令）是对原合同范围的修改，可能增加或减少工作量。常见触发情况：(1) 业主变更设计需求；(2) 现场条件与设计不符；(3) 政府机构要求修改；(4) 不可预见的技术问题。VO 需由 QS 估价、监理审核、业主批准后执行。依据 SIA 或 REDAS 合同条款处理。" },
+  { cat: "contract", q: "SOR 和 Star Rate 有什么区别？", a: "<strong>SOR (Schedule of Rates)：</strong>合同中预先约定的单价表，用于 VO 计价。按实际数量 × 单价计算。<br><strong>Star Rate：</strong>由政府部门（如 BCA）发布的参考费率，常用于政府项目或作为 SOR 缺失时的替代标准。SOR 更灵活，Star Rate 更标准化。VO 争议常围绕 SOR 的合理性展开。" },
+  { cat: "contract", q: "什么是 RRVO / FVO？", a: "<strong>RRVO (Request for Variation Order)：</strong>承包商向监理/业主提交的变更请求，申请对额外工作进行估价和批准。<br><strong>FVO (Final Variation Order)：</strong>项目接近尾声时，对所有未解决的 VO 进行最终清算和确认，形成最终结算依据。RRVO 是流程起点，FVO 是收尾阶段的确认。" },
+  { cat: "contract", q: "索赔（Claim）的基本流程是什么？", a: "索赔流程：(1) <strong>事件发生</strong> — 记录现场情况（照片、日志）；(2) <strong>通知</strong> — 在合同规定时限内书面通知监理；(3) <strong>准备文件</strong> — 影响分析、成本明细、工期影响评估；(4) <strong>提交正式索赔</strong> — 附上支持文件；(5) <strong>协商</strong> — 与业主/QS 讨论；(6) <strong>裁决</strong> — 如有争议可走 DAB（争议裁决委员会）或仲裁。关键是及时通知和充分记录。" },
+  { cat: "contract", q: "什么是 productivity loss claim？如何论证？", a: "Productivity loss claim（生产力损失索赔）指因非承包商原因导致的工作效率下降而产生的额外成本。论证要点：(1) 建立基线生产力数据（投标时的假设）；(2) 记录实际生产力（每日产出）；(3) 分析差距原因（设计变更、现场干扰、多次返工）；(4) 量化损失（人工和机械超支）；(5) 排除承包商自身因素。常用 Measured Mile 方法进行对比分析。" },
+  
+  // General
+  { cat: "general", q: "新加坡建筑行业 PE（Professional Engineer）有什么作用？", a: "PE（专业工程师）由 Professional Engineers Board (PEB) 注册。职责：(1) 签署和认证工程设计；(2) 对设计安全负法律责任；(3) 在 CORENET 提交文件时需 PE 签章；(4) 指导和监督工程团队工作。PE 分不同专业（civil, mechanical, electrical 等），每 2 年需完成 CPD（持续专业发展）学分以维持执照。" },
+  { cat: "general", q: "新加坡工程中常见的图纸缩写和术语有哪些？", a: "常用术语：<br><strong>ACMV：</strong>AHU (Air Handling Unit), FCU (Fan Coil Unit), VAV (Variable Air Volume), Chiller<br><strong>消防：</strong>Sprinkler, Hose Reel, Dry Riser, Wet Riser, FHR (Fire Hose Reel)<br><strong>水务：</strong>DW (Domestic Water), CW (Cold Water), HW (Hot Water), Sanitary, Stormwater<br><strong>电气：</strong>DB (Distribution Board), SM (Switch Meter), UPS<br><strong>通用：</strong>DWG (Drawing), DET (Detail), SHT (Sheet), RFI (Request for Information)" },
+  { cat: "general", q: "项目协调中，MEP 协调的关键时间节点是什么？", a: "关键节点：(1) <strong>Concept Design</strong> — 确定系统方案和空间预留；(2) <strong>Schematic Design</strong> — 主要管线走向和设备位置；(3) <strong>Detailed Design</strong> — 碰撞检测和净高验证；(4) <strong>Construction</strong> — 预留预埋配合土建进度；(5) <strong>Testing & Commissioning</strong> — 各系统调试和联动测试；(6) <strong>Defects Liability</strong> — 保修期内问题修复。BIM 协调在第 3 阶段尤为关键。" },
+  { cat: "general", q: "什么是 Commissioning？包括哪些内容？", a: "Commissioning（调试）是验证所有系统按设计运行的过程。内容：(1) 设备单机测试（水泵、风机等）；(2) 系统平衡（风量/水量平衡）；(3) 控制逻辑测试（BMS 联动）；(4) 性能测试（制冷量、能效）；(5) 消防联动测试；(6) 文件交付（O&M manuals, as-built drawings）。调试通常分 Pre-commissioning、Commissioning 和 Integrated Testing 三个阶段。" },
+  { cat: "general", q: "新加坡工地安全管理有什么要求？", a: "主要依据 Workplace Safety and Health Act (WSHA) 和 WSH Regulations。要求：(1) 所有工人需通过 SEC（Safety Orientation Course）培训；(2) 危险作业需申请 Permit-to-Work；(3) 高处作业需有防坠落措施；(4) 定期安全检查和 Toolbox Meeting；(5) 事故报告和调查义务；(6) MOM（人力部）可进行突击检查。安全违规可导致停工和罚款。" },
+  { cat: "general", q: "BIM 在新加坡工程中是什么地位？", a: "BCA 从 2015 年起要求超过 5,000 m² 的项目强制使用 BIM 提交。用途：(1) 三维可视化设计审查；(2) 碰撞检测（clash detection）；(3) 施工进度模拟（4D）；(4) 成本估算（5D）；(5) 设施管理数据交付（6D）。常用软件：Revit（设计）、Navisworks（协调）、Solibri（审查）。BIM 协调会是设计阶段的常规环节。" },
+];
+
+let currentCat = 'all';
+
+function renderFAQ(items) {
+  const list = document.getElementById('faqList');
+  list.innerHTML = '';
+  if (items.length === 0) {
+    list.innerHTML = '<p style="text-align:center;color:#94a3b8;padding:40px;">没有找到匹配的问题</p>';
+    return;
+  }
+  items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'faq-item';
+    div.dataset.cat = item.cat;
+    div.innerHTML = `
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <span><span class="faq-tag">${catLabel(item.cat)}</span>${item.q}</span>
+      </div>
+      <div class="faq-a">${item.a}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function catLabel(cat) {
+  const map = { acmv: 'ACMV', fire: '消防', water: '水务', authority: '审批', contract: '合同', general: '综合' };
+  return map[cat] || cat;
+}
+
+function filterCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  applyFilter();
+}
+
+function filterFAQ() { applyFilter(); }
+
+function applyFilter() {
+  const keyword = document.getElementById('searchBox').value.toLowerCase();
+  const items = faqs.filter(f => {
+    const catMatch = currentCat === 'all' || f.cat === currentCat;
+    const textMatch = !keyword || f.q.toLowerCase().includes(keyword) || f.a.toLowerCase().includes(keyword);
+    return catMatch && textMatch;
+  });
+  renderFAQ(items);
+}
+
+renderFAQ(faqs);
+</script>
+</body>
+</html>
